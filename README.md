@@ -215,4 +215,8 @@ This is an independent community plugin. It is not affiliated with or endorsed b
 
 ## License
 
+Maintained by Brandon Hanke (PapaGordon), owner of MeFriendos.de.
+
 The original plugin and this MeFriendos build are released under the [MIT License](LICENSE). The original copyright and license notice are retained.
+
+You can use, modify and redistribute this plugin, including commercially. Keep the copyright and license notices with any copies or substantial portions of the code.
