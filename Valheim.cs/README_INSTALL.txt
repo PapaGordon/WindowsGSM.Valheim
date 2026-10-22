@@ -1,4 +1,4 @@
-MeFriendos WindowsGSM Valheim Plugin 0.1.1
+MeFriendos WindowsGSM Valheim Plugin 0.1.3
 ==========================================
 
 INSTALL
@@ -54,13 +54,13 @@ For r2modman / Thunderstore profiles, copy only server-compatible mod files
 and configuration into the matching BepInEx folders on the dedicated server.
 Always check each mod's server requirements.
 
-SECURITY
+FIREWALL
 --------
-This build removes WindowsGSM's broad automatic application firewall rule for
-the exact valheim_server.exe path before the server starts. If removal cannot
-be verified, startup is blocked.
+Firewall management follows WindowsGSM's per-server Auto Firewall setting.
+The plugin does not create, remove or inspect firewall rules and does not block startup for a plugin firewall check.
 
-Manual port-specific firewall rules are left untouched.
+Use a WindowsGSM build with Auto Firewall, such as https://github.com/PapaGordon/WindowsGSM.
+For manual port rules, turn Auto Firewall off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
 
 SHUTDOWN
 --------

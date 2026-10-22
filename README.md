@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/Raziel7893/WindowsGSM/releases/tag/v1.25.2.2"><img src="https://img.shields.io/badge/WindowsGSM-Raziel%20v1.25.2.2-38CDD4" alt="Raziel WindowsGSM v1.25.2.2"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.1.2-8802db" alt="Version 0.1.2"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.1.3-8802db" alt="Version 0.1.3"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
@@ -29,7 +29,7 @@ This plugin installs, updates and runs the official Valheim Dedicated Server thr
 - Sends CTRL+C first when stopping the server, as recommended by Valheim, with a controlled fallback if the process does not exit.
 - Validates the game port and requires a non-placeholder server password of at least five characters.
 - Creates local `save-data` and `logs` directories when needed.
-- Removes WindowsGSM's broad automatic firewall application exception for the exact `valheim_server.exe` before the server starts listening.
+- Leaves firewall management to WindowsGSM's per-server **Auto Firewall** setting.
 - Leaves targeted manual firewall rules unchanged.
 
 ## Quick overview
@@ -47,12 +47,11 @@ This plugin installs, updates and runs the official Valheim Dedicated Server thr
 | Built-in RCON | None |
 | Embedded Console | Read-only process output |
 | Toggle Console | Disabled while Embed Console is enabled |
-| Firewall ports | Manual configuration only |
+| Firewall ports | WindowsGSM Auto Firewall or manual port rules |
 
 ## Requirements
 
-- [Raziel7893/WindowsGSM v1.25.2.1](https://github.com/Raziel7893/WindowsGSM/releases/tag/v1.25.2.1) or a compatible WindowsGSM build
-- Administrator rights for WindowsGSM
+- A compatible WindowsGSM build with per-server **Auto Firewall**, such as [our WindowsGSM build](https://github.com/PapaGordon/WindowsGSM)
 - 64-bit Windows
 - For mods: the current [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) and server-compatible Valheim mods
 
@@ -116,15 +115,13 @@ For a mod profile created with r2modman or Thunderstore Mod Manager:
 
 Back up the world, BepInEx configuration and mod list before Valheim or mod updates. Game updates can temporarily break individual mods even when BepInEx itself still loads.
 
-## Security: automatic port opening is disabled
+## Firewall
 
-WindowsGSM can create an unrestricted application firewall exception for `valheim_server.exe`. This MeFriendos build removes the exact executable exception before starting the server.
+Firewall management follows WindowsGSM's per-server **Auto Firewall** setting. This plugin does not create, remove or inspect firewall rules and does not block startup for a plugin firewall check.
 
-The cleanup uses the Windows Firewall COM API family (`HNetCfg.FwMgr`), matching the approach used by WindowsGSM itself and the other hardened MeFriendos plugins. It does not depend on PowerShell `NetSecurity` cmdlets.
+Use a WindowsGSM build with **Auto Firewall**, such as our [WindowsGSM build](https://github.com/PapaGordon/WindowsGSM). For the MeFriendos setup with manual port rules, turn **Auto Firewall** off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
 
-Only the exact server executable path is selected. After removal, the plugin reacquires the authorized-application list and verifies that the exception is gone. If Windows cannot remove or verify the rule, startup is stopped instead of silently continuing with broad firewall access.
-
-The plugin does **not** create port rules. The intended MeFriendos policy is a narrow manual rule for `2456-2457/UDP` and no public administration port.
+The intended MeFriendos policy is a narrow manual rule for `2456-2457/UDP` and no public administration port.
 
 ## Embedded console and shutdown
 
@@ -180,10 +177,6 @@ Confirm that `winhttp.dll`, `doorstop_config.ini` and the `BepInEx` directory ar
 
 Test without third-party plugins or update the BepInEx/mod set to versions compatible with the new Valheim build. A game update can break mods even when the WindowsGSM plugin itself is unchanged.
 
-### WindowsGSM reports that automatic firewall access could not be disabled
-
-Run WindowsGSM as administrator. If an unrestricted `valheim_server.exe` application rule exists, remove it manually and keep only the intended port-specific rules.
-
 ## Testing checklist
 
 - WindowsGSM loads `Valheim.cs` without a plugin error.
@@ -198,9 +191,8 @@ Run WindowsGSM as administrator. If an unrestricted `valheim_server.exe` applica
 - With Embed Console disabled, a manually configured `-logFile` remains available to Valheim.
 - With Embed Console disabled, the native Valheim process starts minimized rather than hidden.
 - Stop sends CTRL+C and the world shuts down cleanly.
-- No broad WindowsGSM application exception remains for this server's `valheim_server.exe` after startup.
+- Auto Firewall on/off is controlled by WindowsGSM and is not overridden by the plugin.
 - Manually configured `2456-2457/UDP` rules remain present.
-- A firewall-cleanup failure prevents the server process from starting.
 
 ## Project links
 
