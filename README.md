@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Raziel7893/WindowsGSM/releases/tag/v1.25.2.2"><img src="https://img.shields.io/badge/WindowsGSM-Raziel%20v1.25.2.2-38CDD4" alt="Raziel WindowsGSM v1.25.2.2"></a>
+  <a href="https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0"><img src="https://img.shields.io/badge/WindowsGSM-MeFriendos%20v1.25.3.0-38CDD4" alt="MeFriendos WindowsGSM v1.25.3.0"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.1.3-8802db" alt="Version 0.1.3"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
 </p>
@@ -51,7 +51,9 @@ This plugin installs, updates and runs the official Valheim Dedicated Server thr
 
 ## Requirements
 
-- A compatible WindowsGSM build with per-server **Auto Firewall**, such as [our WindowsGSM build](https://github.com/PapaGordon/WindowsGSM)
+MeFriendos uses this plugin with [WindowsGSM v1.25.3.0](https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0). The Windows x64 download includes the .NET runtime.
+
+- [MeFriendos WindowsGSM v1.25.3.0](https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0) with per-server **Auto Firewall**
 - 64-bit Windows
 - For mods: the current [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) and server-compatible Valheim mods
 
@@ -119,7 +121,7 @@ Back up the world, BepInEx configuration and mod list before Valheim or mod upda
 
 Firewall management follows WindowsGSM's per-server **Auto Firewall** setting. This plugin does not create, remove or inspect firewall rules and does not block startup for a plugin firewall check.
 
-Use a WindowsGSM build with **Auto Firewall**, such as our [WindowsGSM build](https://github.com/PapaGordon/WindowsGSM). For the MeFriendos setup with manual port rules, turn **Auto Firewall** off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
+Use [MeFriendos WindowsGSM v1.25.3.0](https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0) with **Auto Firewall**. For the MeFriendos setup with manual port rules, turn **Auto Firewall** off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
 
 The intended MeFriendos policy is a narrow manual rule for `2456-2457/UDP` and no public administration port.
 
@@ -127,7 +129,7 @@ The intended MeFriendos policy is a narrow manual rule for `2456-2457/UDP` and n
 
 When **Embed Console** is enabled, Valheim's standard output and standard error streams are forwarded to WindowsGSM. Standard input is deliberately not redirected so the server can still receive a clean CTRL+C shutdown request.
 
-The native console window is started hidden in this mode. Raziel WindowsGSM disables **Toggle Console** while standard output is redirected; this is intentional for the MeFriendos build because the useful Valheim runtime output is already available in the WindowsGSM embedded console.
+The native console window is started hidden in this mode. WindowsGSM disables **Toggle Console** while standard output is redirected; this is intentional for the MeFriendos build because the useful Valheim runtime output is already available in the WindowsGSM embedded console.
 
 When **Embed Console** is disabled, stdout/stderr remain attached to Valheim normally and the native process starts minimized instead of hidden.
 
@@ -200,7 +202,7 @@ Test without third-party plugins or update the BepInEx/mod set to versions compa
 - Original plugin: [Sarpendon/WindowsGSM.Valheim](https://github.com/Sarpendon/WindowsGSM.Valheim)
 - Valheim dedicated-server guide: [valheim.com/support/a-guide-to-dedicated-servers](https://valheim.com/support/a-guide-to-dedicated-servers/)
 - BepInExPack Valheim: [Thunderstore](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/)
-- WindowsGSM: [Raziel7893/WindowsGSM v1.25.2.1](https://github.com/Raziel7893/WindowsGSM/releases/tag/v1.25.2.1)
+- WindowsGSM: [MeFriendos WindowsGSM v1.25.3.0](https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0)
 - Community: [mefriendos.de](https://mefriendos.de)
 
 This is an independent community plugin. It is not affiliated with or endorsed by Iron Gate, Coffee Stain Publishing, BepInEx, Thunderstore, Sarpendon or WindowsGSM.
