@@ -19,8 +19,8 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.Valheim",
             author = "MeFriendos",
             description = "WindowsGSM plugin for Valheim Dedicated Server (MeFriendos build)",
-            version = "0.1.3",
-            url = "https://github.com/PapaGordon/WindowsGSM.Valheim-MeFriendos",
+            version = "0.1.4",
+            url = "https://github.com/PapaGordon/WindowsGSM.Valheim",
             color = "#8802db"
         };
 
