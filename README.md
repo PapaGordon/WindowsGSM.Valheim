@@ -5,7 +5,7 @@
 <h1 align="center">WindowsGSM.Valheim</h1>
 
 <p align="center">
-  MeFriendos build for running a Valheim dedicated server with WindowsGSM.
+  Run a Valheim dedicated server with WindowsGSM.
 </p>
 
 <p align="center">
@@ -14,98 +14,55 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
-This plugin installs, updates and runs the official Valheim Dedicated Server through SteamCMD. The MeFriendos build is based on `WindowsGSM.Valheim` by Sarpendon and is prepared for a Steam-only, BepInEx-modded server without Crossplay.
+This plugin installs and updates the Valheim dedicated server through SteamCMD and runs it from WindowsGSM. It's set up for a server on the normal Steam network, with or without BepInEx mods, and without Crossplay. It's based on [WindowsGSM.Valheim](https://github.com/Sarpendon/WindowsGSM.Valheim) by Sarpendon.
 
+**Using our [MeFriendos WindowsGSM](https://github.com/PapaGordon/WindowsGSM)?** Then you don't need this plugin. Valheim is built in there, with the same code. Just pick **Valheim Dedicated Server** under **Install**. This plugin is for other WindowsGSM builds.
 
-## WindowsGSM and Steam login
+## What it does
 
-Use the [latest MeFriendos WindowsGSM release](https://github.com/PapaGordon/WindowsGSM/releases/latest). This server is already built into that fork, so select its normal built-in entry there. The standalone plugin remains available for other compatible WindowsGSM builds.
+- Installs and updates the server (Steam app `896660`). No Steam account needed.
+- Passes server name, port and world from WindowsGSM to Valheim.
+- Checks before every start that you've set a real password and didn't add `-crossplay` by accident.
+- Works with BepInEx mods without any extra launcher.
+- Shows the server output in **Embed Console**.
+- Stops the server with CTRL+C, so the world gets saved, as Valheim recommends.
+- Creates the `save-data` and `logs` folders when needed.
 
-This dedicated server uses anonymous SteamCMD downloads. It does not read or require your Steam password, so encrypted account credentials do not change its installation or updates.
+## Install
 
-The plugin leaves firewall management to the host. On other WindowsGSM builds, configure game/query port rules manually if the host does not manage them. Router forwarding is separate.
-
-## Features
-
-- Installs and updates the official Valheim Dedicated Server through SteamCMD.
-- Uses the Steam backend by default and explicitly rejects accidental `-crossplay` startup parameters.
-- Supports BepInEx on Windows without a custom wrapper: when BepInEx is installed beside `valheim_server.exe`, launching the normal server executable loads it through Doorstop.
-- Supports the WindowsGSM embedded console as read-only output while keeping stdin available for clean shutdown.
-- Keeps Valheim's live runtime output available to the WindowsGSM embedded console by avoiding native `-logFile` redirection while Embed Console is enabled.
-- Starts the native Valheim console hidden while Embed Console is enabled so the redirected console window does not flash or remain visible unnecessarily.
-- Leaves WindowsGSM Toggle Console disabled while Embed Console is active because stdout/stderr are redirected into WindowsGSM.
-- Keeps normal native-window behavior when Embed Console is disabled.
-- Sends CTRL+C first when stopping the server, as recommended by Valheim, with a controlled fallback if the process does not exit.
-- Validates the game port and requires a non-placeholder server password of at least five characters.
-- Creates local `save-data` and `logs` directories when needed.
-- Leaves firewall management to WindowsGSM's per-server **Auto Firewall** setting.
-- Leaves targeted manual firewall rules unchanged.
-
-## Quick overview
-
-| Setting | Value |
-| --- | --- |
-| SteamCMD App ID | `896660` |
-| Start executable | `valheim_server.exe` |
-| Default game port | `2456/UDP` |
-| Default query/secondary port | `2457/UDP` |
-| Port increment | `2` |
-| SteamCMD login | Anonymous |
-| Networking | Steam backend, no Crossplay |
-| Mod framework | BepInEx-ready |
-| Built-in RCON | None |
-| Embedded Console | Read-only process output |
-| Toggle Console | Disabled while Embed Console is enabled |
-| Firewall ports | WindowsGSM Auto Firewall or manual port rules |
-
-## Requirements
-
-MeFriendos uses this plugin with [WindowsGSM (latest release)](https://github.com/PapaGordon/WindowsGSM/releases/latest). The Windows x64 download includes the .NET runtime.
-
-- [MeFriendos WindowsGSM (latest release)](https://github.com/PapaGordon/WindowsGSM/releases/latest) with per-server **Auto Firewall**
-- 64-bit Windows
-- For mods: the current [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) and server-compatible Valheim mods
-
-Valheim, BepInEx and third-party mods are not distributed with this plugin.
-
-## Plugin installation
-
-1. Download the latest release archive from [Releases](https://github.com/PapaGordon/WindowsGSM.Valheim/releases/latest).
-2. Extract the complete `Valheim.cs` folder into `<WindowsGSM>\plugins\`.
+1. Download the ZIP from the [latest release](https://github.com/PapaGordon/WindowsGSM.Valheim/releases/latest).
+2. Copy the whole `Valheim.cs` folder into `<WindowsGSM>\plugins\`.
 3. Click **Reload Plugins** or restart WindowsGSM.
-4. Add **Valheim Dedicated Server** and run **Install**.
-5. Replace the default `CHANGE_ME` password in **Server Start Param** with a strong password of at least five characters.
-6. Configure the required UDP game ports manually.
+4. Pick **Valheim Dedicated Server** and click **Install**.
+5. In the start parameters, replace `CHANGE_ME` with your server password. It needs at least 5 characters.
+6. Open UDP ports `2456` and `2457` in the Windows firewall and on your router.
 7. Start the server.
 
-The default parameters are:
+## Settings
+
+| WindowsGSM field | Default | Passed to Valheim as |
+| --- | --- | --- |
+| Server Name | | `-name` |
+| Server Port | `2456` (UDP) | `-port`. Valheim also uses the next port, `2457`. |
+| Map | `Dedicated` | `-world`, the name of your world |
+
+Valheim always allows up to 10 players. **Max Players** in WindowsGSM doesn't change that. Each new Valheim server in WindowsGSM gets ports 2 higher than the previous one.
+
+New servers start with these parameters:
 
 ```text
 -password "CHANGE_ME" -savedir ".\save-data" -public 1 -saveinterval 1800 -backups 4 -backupshort 7200 -backuplong 43200
 ```
 
-The plugin intentionally refuses to start while the placeholder password is still configured.
+That means: worlds are saved in `serverfiles\save-data`, the server is listed publicly, it saves every 30 minutes and keeps 4 automatic backups. The server won't start while the password is still `CHANGE_ME`, shorter than 5 characters or missing.
 
-If you upgrade an existing 0.1.0 server and `-logFile` is still present in **Server Start Param**, you do not have to remove it for Embed Console to work: version 0.1.1 filters that argument from the Valheim launch command while Embed Console is enabled. It is still recommended to remove the obsolete parameter from the saved configuration unless you intentionally want to use it with Embed Console disabled.
+## Steam only, no Crossplay
 
-## Steam-only networking and ports
+This plugin is meant for the normal Steam network. Don't add `-crossplay`, the server refuses to start with it. Valheim needs the game port and the one after it, both UDP. With the defaults that's `2456` and `2457`. Valheim has no RCON, so there's no admin port to open.
 
-This build is intended for the normal Steam backend. Do **not** add `-crossplay`.
+## Mods with BepInEx
 
-Valheim uses the selected game port and the following port. With the default WindowsGSM value this means:
-
-| Purpose | Protocol | Port |
-| --- | --- | --- |
-| Game | UDP | `2456` |
-| Secondary/query traffic | UDP | `2457` |
-
-For the MeFriendos firewall policy, allow `2456-2457/UDP` publicly. No separate Valheim RCON rule is required because the dedicated server has no built-in RCON service.
-
-If a future BepInEx administration mod opens its own management port, keep that port separate from the public game rules and restrict it to the trusted Private/VPN network.
-
-## BepInEx and r2modman / Thunderstore
-
-On Windows, BepInEx does not require a separate launch script. Install the contents of `BepInExPack_Valheim` directly into the Valheim server root so the following sit beside `valheim_server.exe`:
+On Windows, BepInEx doesn't need a special launcher. Copy the contents of [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) straight into the server folder, so these sit next to `valheim_server.exe`:
 
 ```text
 BepInEx\
@@ -113,111 +70,70 @@ doorstop_config.ini
 winhttp.dll
 ```
 
-The current BepInExPack uses Doorstop to load BepInEx automatically when `valheim_server.exe` starts.
+BepInEx then loads automatically when the server starts.
 
-For a mod profile created with r2modman or Thunderstore Mod Manager:
+If you built your mod list with r2modman or Thunderstore Mod Manager:
 
-1. Build and test the profile on a matching Valheim version.
+1. Test the profile with the same Valheim version as the server.
 2. Open the profile folder.
-3. Copy the server-compatible contents from `BepInEx\plugins`, `BepInEx\config` and, when required, `BepInEx\patchers` into the corresponding server folders.
-4. Copy additional root files only when a specific mod explicitly requires them.
-5. Do not deploy client-only mods to the dedicated server unless their documentation says they support server installation.
-6. Start the server and review `BepInEx\LogOutput.log` plus the WindowsGSM embedded console. If Embed Console is disabled and you intentionally configure Valheim's `-logFile`, review that file instead.
+3. Copy the server mods from `BepInEx\plugins`, `BepInEx\config` and, if needed, `BepInEx\patchers` into the same folders on the server.
+4. Copy other files only if a mod says it needs them.
+5. Leave client-only mods out, unless their description says they work on servers.
+6. Start the server and check `BepInEx\LogOutput.log` and the WindowsGSM console.
 
-Back up the world, BepInEx configuration and mod list before Valheim or mod updates. Game updates can temporarily break individual mods even when BepInEx itself still loads.
+If a mod opens its own admin port, keep it away from the internet and only allow it from your local network or a VPN.
+
+## Updating
+
+1. Stop the server.
+2. Back up `save-data` and your complete BepInEx folder with configs.
+3. Click **Update** in WindowsGSM.
+4. Check that BepInExPack and all your mods support the new Valheim version.
+5. Start the server and look for errors in the console and logs.
+
+The plugin never installs, removes or updates mods. A Valheim update can break single mods even if BepInEx still loads.
+
+## Console and stopping
+
+With **Embed Console** on, the server output appears in WindowsGSM and Valheim's own window stays hidden. WindowsGSM then disables **Toggle Console**. Turn Embed Console off if you want Valheim's window instead. You can't type commands into the embedded console.
+
+`-logFile` would send Valheim's output to a file instead of WindowsGSM. That's why it's not in the default parameters, and the plugin ignores it while Embed Console is on. With Embed Console off, `-logFile` works as usual.
+
+**Stop** sends CTRL+C and gives Valheim 20 seconds to save and close. If that doesn't work, it tries again through the server window and waits 10 more seconds. Only then is the process ended.
 
 ## Firewall
 
-Firewall management follows WindowsGSM's per-server **Auto Firewall** setting. This plugin does not create, remove or inspect firewall rules and does not block startup for a plugin firewall check.
-
-Use [MeFriendos WindowsGSM (latest release)](https://github.com/PapaGordon/WindowsGSM/releases/latest) with **Auto Firewall**. For the MeFriendos setup with manual port rules, turn **Auto Firewall** off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
-
-The intended MeFriendos policy is a narrow manual rule for `2456-2457/UDP` and no public administration port.
-
-## Embedded console and shutdown
-
-When **Embed Console** is enabled, Valheim's standard output and standard error streams are forwarded to WindowsGSM. Standard input is deliberately not redirected so the server can still receive a clean CTRL+C shutdown request.
-
-The native console window is started hidden in this mode. WindowsGSM disables **Toggle Console** while standard output is redirected; this is intentional for the MeFriendos build because the useful Valheim runtime output is already available in the WindowsGSM embedded console.
-
-When **Embed Console** is disabled, stdout/stderr remain attached to Valheim normally and the native process starts minimized instead of hidden.
-
-WindowsGSM writes the selected server's Embed Console state into the plugin's `AllowsEmbedConsole` field immediately before `Start()` is called. The plugin therefore uses that field as the effective runtime state, matching the normal WindowsGSM plugin flow.
-
-Valheim's `-logFile` option redirects the live runtime log away from the process output used by WindowsGSM. Version 0.1.1 therefore does not include `-logFile` in the default parameters and removes a legacy/manual `-logFile <path>` argument from the launch command only while Embed Console is enabled. With Embed Console disabled, a manually configured `-logFile` is left untouched.
-
-Valheim's own dedicated-server documentation recommends stopping the server with CTRL+C. The plugin therefore tries a console CTRL+C first and waits up to 20 seconds. If that is unavailable, it tries the console-keystroke method. A forced process kill is used only as the final fallback.
-
-## Updating Valheim
-
-1. Stop the server cleanly.
-2. Back up `save-data`, the world files and the complete BepInEx configuration/mod set.
-3. Click **Update** in WindowsGSM.
-4. Confirm that the current BepInExPack and all server mods support the installed Valheim version.
-5. Start the server and inspect the console/logs for mod-loader or plugin errors.
-
-The plugin does not automatically install, remove or update third-party mods.
+The plugin doesn't create or remove firewall rules. Use WindowsGSM's **Auto Firewall** if your build has it, or open UDP `2456` and `2457` yourself (or your own port and the one after it). Router port forwarding is always up to you.
 
 ## Troubleshooting
 
-### Toggle Console is disabled
+**"Change the default Valheim password placeholder".** Replace `CHANGE_ME` in the start parameters with your password.
 
-This is expected while **Embed Console** is enabled. Valheim's stdout/stderr are redirected into the WindowsGSM embedded console, so the native window does not provide a second useful output view. Disable Embed Console if you explicitly want to use the native console window instead.
+**"Valheim requires a server password of at least 5 characters".** Choose a longer password.
 
-### Startup says the password placeholder must be changed
+**"Remove -crossplay from Server Start Param".** This plugin only supports the Steam network.
 
-Edit **Server Start Param** and replace `CHANGE_ME` with the real server password.
+**"Server Port must be a number between 1 and 65534".** Valheim also uses the next port, so 65535 doesn't work.
 
-### Startup says Crossplay is disabled
+**Embed Console stops after a few Unity lines.** There's probably a `-logFile` in your start parameters. With Embed Console on it's ignored, but remove it anyway to keep things tidy.
 
-Remove `-crossplay` from **Server Start Param**. This build is intentionally configured for Steam networking.
+**Players can't connect.** Check that the game port and the one after it are open over UDP and forwarded on your router.
 
-### Embedded console stops after the Unity memory setup lines
+**BepInEx doesn't load.** `winhttp.dll`, `doorstop_config.ini` and the `BepInEx` folder have to be in the same folder as `valheim_server.exe`. Then check `BepInEx\LogOutput.log`.
 
-Check **Server Start Param** for a manually saved `-logFile` argument. Version 0.1.1 filters it from the actual Valheim command whenever Embed Console is enabled, so the live Valheim output stays attached to WindowsGSM. For a clean upgraded configuration, remove the old `-logFile` argument from the saved parameters as well.
+**The server doesn't start after a Valheim update.** Try without mods, or update BepInEx and your mods to versions for the new Valheim.
 
-### Players cannot connect
+## Links
 
-Confirm that the configured game port and port +1 are forwarded and permitted by targeted UDP firewall rules. With the default configuration this is `2456-2457/UDP`.
+- [Releases](https://github.com/PapaGordon/WindowsGSM.Valheim/releases)
+- [MeFriendos WindowsGSM](https://github.com/PapaGordon/WindowsGSM)
+- [Original plugin by Sarpendon](https://github.com/Sarpendon/WindowsGSM.Valheim)
+- [Valheim dedicated server guide](https://valheim.com/support/a-guide-to-dedicated-servers/)
+- [BepInExPack Valheim on Thunderstore](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/)
+- [MeFriendos](https://mefriendos.de)
 
-### BepInEx does not load
-
-Confirm that `winhttp.dll`, `doorstop_config.ini` and the `BepInEx` directory are in the same server root that contains `valheim_server.exe`. Then inspect `BepInEx\LogOutput.log`.
-
-### The server no longer starts after a Valheim update
-
-Test without third-party plugins or update the BepInEx/mod set to versions compatible with the new Valheim build. A game update can break mods even when the WindowsGSM plugin itself is unchanged.
-
-## Testing checklist
-
-- WindowsGSM loads `Valheim.cs` without a plugin error.
-- Install and Update complete through SteamCMD.
-- The server refuses the default password placeholder.
-- The server refuses `-crossplay` in the start parameters.
-- The Steam backend starts on the configured port and port +1.
-- BepInEx loads when correctly installed beside `valheim_server.exe`.
-- With Embed Console enabled, live Valheim output continues after the Unity memory setup lines.
-- With Embed Console enabled, the native console starts hidden and Toggle Console remains disabled.
-- A legacy/manual `-logFile` parameter is ignored for the actual launch only while Embed Console is enabled.
-- With Embed Console disabled, a manually configured `-logFile` remains available to Valheim.
-- With Embed Console disabled, the native Valheim process starts minimized rather than hidden.
-- Stop sends CTRL+C and the world shuts down cleanly.
-- Auto Firewall on/off is controlled by WindowsGSM and is not overridden by the plugin.
-- Manually configured `2456-2457/UDP` rules remain present.
-
-## Project links
-
-- Source: [PapaGordon/WindowsGSM.Valheim](https://github.com/PapaGordon/WindowsGSM.Valheim)
-- Original plugin: [Sarpendon/WindowsGSM.Valheim](https://github.com/Sarpendon/WindowsGSM.Valheim)
-- Valheim dedicated-server guide: [valheim.com/support/a-guide-to-dedicated-servers](https://valheim.com/support/a-guide-to-dedicated-servers/)
-- BepInExPack Valheim: [Thunderstore](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/)
-- WindowsGSM: [MeFriendos WindowsGSM (latest release)](https://github.com/PapaGordon/WindowsGSM/releases/latest)
-- Community: [mefriendos.de](https://mefriendos.de)
-
-This is an independent community plugin. It is not affiliated with or endorsed by Iron Gate, Coffee Stain Publishing, BepInEx, Thunderstore, Sarpendon or WindowsGSM.
+This is a community plugin. It's not affiliated with or endorsed by Iron Gate, Coffee Stain Publishing, BepInEx, Thunderstore, Sarpendon or the WindowsGSM project. Valheim, BepInEx and mods are not included.
 
 ## License
 
-The original plugin and this MeFriendos build are released under the [MIT License](LICENSE). The original copyright and license notice are retained.
-
-You can use, modify and redistribute this plugin, including commercially. Keep the copyright and license notices with any copies or substantial portions of the code.
+The original plugin and this version are under the [MIT License](LICENSE). The original copyright notice stays in it. You can use, change and share the plugin, also commercially, as long as the copyright and license notice stay with it.

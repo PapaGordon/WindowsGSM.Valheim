@@ -1,73 +1,31 @@
-MeFriendos WindowsGSM Valheim Plugin 0.1.3
-==========================================
+WindowsGSM.Valheim 0.1.4
+========================
 
-INSTALL
+Runs a Valheim dedicated server with WindowsGSM.
+
+If you use MeFriendos WindowsGSM, you don't need this plugin.
+Valheim is already built in there.
+
+Install
 -------
-1. Copy the complete Valheim.cs folder into:
-   <WindowsGSM>\plugins\Valheim.cs
+1. Copy this whole Valheim.cs folder into the "plugins" folder of WindowsGSM.
+2. Click "Reload Plugins" or restart WindowsGSM.
+3. Pick "Valheim Dedicated Server" and click Install.
+   No Steam account needed.
+4. In the start parameters, replace CHANGE_ME with your server password
+   (at least 5 characters). The server won't start before you do.
+5. Open UDP 2456 and 2457 in your firewall and on your router.
+6. Start the server.
 
-2. Reload plugins or restart WindowsGSM.
+Good to know
+------------
+- Server Name, Server Port and Map (world name) are passed to Valheim.
+- Don't add -crossplay. This plugin is for the normal Steam network.
+- Mods: copy BepInExPack Valheim into the server folder, so BepInEx\,
+  doorstop_config.ini and winhttp.dll are next to valheim_server.exe.
+- Stop sends CTRL+C so the world gets saved.
 
-3. Install "Valheim Dedicated Server".
+Full guide: https://github.com/PapaGordon/WindowsGSM.Valheim
 
-4. Change the default password in Server Start Param.
-   The plugin intentionally refuses to start with CHANGE_ME.
-
-5. Do not add -crossplay. This MeFriendos build uses the Steam backend.
-
-6. Open/forward only the required Valheim game ports for the configured
-   game port and game port +1. Defaults:
-
-   UDP 2456-2457
-
-   Valheim has no built-in RCON port.
-
-DEFAULT PARAMETERS
-------------------
--password "CHANGE_ME" -savedir ".\save-data" -public 1 -saveinterval 1800 -backups 4 -backupshort 7200 -backuplong 43200
-
-EMBEDDED CONSOLE
-----------------
-Version 0.1.1 removes -logFile from the default parameters so Valheim's live
-runtime output remains available to the WindowsGSM embedded console.
-
-If an existing 0.1.0 server still has -logFile in Server Start Param, the
-plugin filters that argument from the actual Valheim launch command while
-Embed Console is enabled. The saved WindowsGSM configuration is not modified.
-
-When Embed Console is disabled, a manually configured -logFile argument is
-left untouched and can still be used normally.
-
-BEPINEX / MODDED SERVER
------------------------
-For Windows, install the current BepInExPack_Valheim contents directly into
-Valheim's serverfiles root. The following must be beside valheim_server.exe:
-
-   BepInEx\
-   doorstop_config.ini
-   winhttp.dll
-
-No special Windows launch wrapper is needed. BepInEx loads through Doorstop
-when WindowsGSM starts valheim_server.exe.
-
-For r2modman / Thunderstore profiles, copy only server-compatible mod files
-and configuration into the matching BepInEx folders on the dedicated server.
-Always check each mod's server requirements.
-
-FIREWALL
---------
-Firewall management follows WindowsGSM's per-server Auto Firewall setting.
-The plugin does not create, remove or inspect firewall rules and does not block startup for a plugin firewall check.
-
-Use MeFriendos WindowsGSM v1.25.3.0 with Auto Firewall:
-https://github.com/PapaGordon/WindowsGSM/releases/tag/v1.25.3.0
-For manual port rules, turn Auto Firewall off for this server in WindowsGSM and configure the required ports yourself. Router forwarding remains separate.
-
-SHUTDOWN
---------
-Valheim should be stopped with CTRL+C. The plugin attempts CTRL+C first and
-uses forced termination only as a final fallback.
-
-PROJECT
--------
-https://github.com/PapaGordon/WindowsGSM.Valheim-MeFriendos
+Based on WindowsGSM.Valheim by Sarpendon.
+MeFriendos build by PapaGordon. https://mefriendos.de
